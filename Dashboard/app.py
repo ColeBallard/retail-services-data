@@ -1,7 +1,6 @@
 from dash import Dash, html, dcc
 import plotly.express as px
 import pandas as pd
-from idna import intranges_contain
 import plotly.graph_objects as go
 import pymssql
 from dash.dependencies import Input, Output
