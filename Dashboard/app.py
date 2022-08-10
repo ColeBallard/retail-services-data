@@ -1,14 +1,9 @@
 from dash import Dash, html, dcc
 import plotly.express as px
 import pandas as pd
-import plotly.graph_objects as go
-import pymssql
 from dash.dependencies import Input, Output
-import numpy as np
 import urllib
 import sqlalchemy as sa
-from sqlalchemy import create_engine, event
-from sqlalchemy.engine.url import URL
 import os
 
 if os.getenv("app") != "prod":
