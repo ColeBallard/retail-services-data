@@ -5,6 +5,10 @@ import plotly.graph_objects as go
 import pymssql
 from dash.dependencies import Input, Output
 import numpy as np
+import urllib
+import sqlalchemy as sa
+from sqlalchemy import create_engine, event
+from sqlalchemy.engine.url import URL
 import os
 
 if os.getenv("app") != "prod":
@@ -26,13 +30,20 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = Dash(__name__, external_stylesheets=external_stylesheets)
 
 def createBarGraph():
+    
+    params = urllib.parse.quote_plus("DRIVER={SQL Server};"
+                                     "SERVER="+server+";"
+                                     "DATABASE="+database+";"
+                                     "UID="+user+";"
+                                     "PWD="+password+";")
 
-    conn = pymssql.connect(server,user,password,database)
-    conn.cursor()
+    engine = sa.create_engine('mssql+pyodbc:///?odbc_connect={}'.format(params))
+
     query = f"SELECT * FROM {macroTable}"
-    df = pd.read_sql(query,conn)
 
-    print(df.columns)
+    con = engine.connect()
+    
+    df = pd.read_sql(query,con)
 
     fig = px.bar(df, x='MacroID', y='CPI', title='MacroID by CPI',
         labels={'MacroID': 'Macro ID', 'CPI': 'CPI'})
