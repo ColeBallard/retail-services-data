@@ -4,6 +4,7 @@ import pandas as pd
 from dash.dependencies import Input, Output
 import urllib
 import sqlalchemy as sa
+import flask
 import os
 
 if os.getenv("app_environment") != "production":
@@ -21,6 +22,8 @@ else:
     server = os.getenv("server")
     
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+
+server = flask.Flask(__name__)
 
 app = Dash(__name__, external_stylesheets=external_stylesheets, server=server)
 
