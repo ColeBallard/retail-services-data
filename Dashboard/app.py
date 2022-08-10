@@ -71,6 +71,6 @@ def display_value(value):
     return f'You have selected {value}'
 
 if __name__ == '__main__':
-    dashApp.run_server(debug=True)
+    app.run_server(debug=True)
 
 # http://127.0.0.1:8050/
