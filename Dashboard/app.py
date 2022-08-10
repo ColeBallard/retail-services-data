@@ -22,15 +22,9 @@ else:
     
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-app = Dash(__name__, external_stylesheets=external_stylesheets)
+app = Dash(__name__, external_stylesheets=external_stylesheets).server
 
 def createBarGraph():
-
-    print(type("DRIVER={SQL Server};"))
-    print(type("SERVER="+server+";"))
-    print(type("DATABASE="+database+";"))
-    print(type("UID="+user+";"))
-    print(type("PWD="+password+";"))
     
     params = urllib.parse.quote_plus("DRIVER={ODBC Driver 17 for SQL Server};"
                                      "SERVER="+server+";"
