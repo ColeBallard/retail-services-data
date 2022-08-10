@@ -6,7 +6,7 @@ import urllib
 import sqlalchemy as sa
 import os
 
-if os.getenv("app") != "prod":
+if os.getenv("app_environment") != "production":
     from config import database, user, password, dateTable, macroTable, NAICS_NAPCS, NAICSTable, NAPCSTable, server
 
 else:
