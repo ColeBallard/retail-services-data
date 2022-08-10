@@ -15,7 +15,7 @@ if os.getenv("app") != "prod":
     from config import database, user, password, dateTable, macroTable, NAICS_NAPCS, NAICSTable, NAPCSTable, server
 
 else:
-    database = os.getenv("Password")
+    database = os.getenv("database")
     dateTable = os.getenv("dateTable")
     macroTable = os.getenv("macroTable")
     NAICS_NAPCS = os.getenv("NAICS_NAPCS")
