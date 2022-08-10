@@ -30,6 +30,9 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = Dash(__name__, external_stylesheets=external_stylesheets)
 
 def createBarGraph():
+
+    print(type("DRIVER={SQL Server};"))
+    print(type("SERVER="+server+";"))
     
     params = urllib.parse.quote_plus("DRIVER={SQL Server};"
                                      "SERVER="+server+";"
