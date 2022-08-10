@@ -33,6 +33,9 @@ def createBarGraph():
 
     print(type("DRIVER={SQL Server};"))
     print(type("SERVER="+server+";"))
+    print(type("DATABASE="+database+";"))
+    print(type("UID="+user+";"))
+    print(type("PWD="+password+";"))
     
     params = urllib.parse.quote_plus("DRIVER={SQL Server};"
                                      "SERVER="+server+";"
