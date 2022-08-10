@@ -22,7 +22,8 @@ else:
     
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-app = Dash(__name__, external_stylesheets=external_stylesheets).server
+dashApp = Dash(__name__, external_stylesheets=external_stylesheets)
+app = dashApp.server
 
 def createBarGraph():
     
@@ -45,7 +46,7 @@ def createBarGraph():
 
     return fig
 
-app.layout = html.Div(children=[
+dashApp.layout = html.Div(children=[
     html.H1(children='Retail Service Data'),
 
     html.Div(children='''
@@ -64,12 +65,12 @@ app.layout = html.Div(children=[
     html.Div(id='display-value')
 ])
 
-@app.callback(Output('display-value', 'children'),
+@dashApp.callback(Output('display-value', 'children'),
                 [Input('dropdown', 'value')])
 def display_value(value):
     return f'You have selected {value}'
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    dashApp.run_server(debug=True)
 
 # http://127.0.0.1:8050/
