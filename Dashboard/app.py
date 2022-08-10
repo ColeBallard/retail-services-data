@@ -8,7 +8,7 @@ import flask
 import os
 
 if os.getenv("app_environment") != "production":
-    from config import database, user, password, dateTable, macroTable, NAICS_NAPCS, NAICSTable, NAPCSTable, server
+    from config import database, user, password, dateTable, macroTable, NAICS_NAPCS, NAICSTable, NAPCSTable, serverName
 
 else:
     database = os.getenv("database")
@@ -19,7 +19,7 @@ else:
     NAPCSTable = os.getenv("NAPCSTable")
     user = os.getenv("user")
     password = os.getenv("password")
-    server = os.getenv("server")
+    serverName = os.getenv("serverName")
     
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -30,7 +30,7 @@ app = Dash(__name__, external_stylesheets=external_stylesheets, server=server)
 def createBarGraph():
     
     params = urllib.parse.quote_plus("DRIVER={ODBC Driver 17 for SQL Server};"
-                                     "SERVER="+server+";"
+                                     "SERVER="+serverName+";"
                                      "DATABASE="+database+";"
                                      "UID="+user+";"
                                      "PWD="+password+";")
