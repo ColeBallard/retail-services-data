@@ -1,3 +1,4 @@
+import dash
 from dash import Dash, html, dcc
 import plotly.express as px
 import pandas as pd
@@ -9,7 +10,7 @@ import os
 
 # get environment variables from config if production environment
 if os.getenv("app_environment") != "production":
-    from config import database, user, password, dateTable, macroTable, NAICS_NAPCS, NAICSTable, NAPCSTable, salesTable, serverName
+    from config import database, user, password, dateTable, macroTable, NAICS_NAPCS, NAICSTable, NAPCSTable, salesTable, CPI_v_RPI, USTRADE_v_USWTRADE, serverName
 
 # get environment variables from heroku if development environment
 else:
@@ -20,6 +21,8 @@ else:
     NAICSTable = os.getenv("NAICSTable")
     NAPCSTable = os.getenv("NAPCSTable")
     salesTable = os.getenv("salesTable")
+    CPI_v_RPI = os.getenv("CPI_v_RPI")
+    USTRADE_v_USWTRADE = os.getenv("USTRADE_v_USWTRADE")
     user = os.getenv("user")
     password = os.getenv("password")
     serverName = os.getenv("serverName")
@@ -27,6 +30,9 @@ else:
 server = flask.Flask(__name__)
 
 app = Dash(__name__, external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css'], server = server)
+
+dash.register_page("home",  path='/', layout=html.Div('Home Page'))
+dash.register_page("analytics", layout=html.Div('Analytics'))
 
 # set parameters for connection string
 params = urllib.parse.quote_plus("DRIVER={ODBC Driver 17 for SQL Server};"
@@ -72,6 +78,66 @@ def vis1():
 
     return fig
 
+def vis2():
+
+    query = f'''
+        SELECT * FROM {CPI_v_RPI}
+    '''
+    
+    # create dataframe from query
+    cpi_v_rpi = pd.read_sql(query, conn)
+
+    df = pd.DataFrame()
+
+    print("Building cpi_v_rpi df")
+    for cpi in cpi_v_rpi['CPI']:
+        # print("In the for loop to build df2")
+        query = f'''
+            SELECT *
+                FROM {CPI_v_RPI}
+                WHERE {CPI_v_RPI}.CPI = {cpi}
+    '''
+        df = pd.concat([df, pd.read_sql(query, conn)])
+        # print(df2)
+
+    df.rename(columns = {'RPI':'RPI (Billions of US Dollars', 'CPI':'CPI (2015 = 100)'}, inplace = True)
+
+    fig = px.scatter(df, x='RPI (Billions of US Dollars', y='CPI (2015 = 100)', 
+                    title='Consumer Price Index (CPI) vs Real Person Income (RPI)', trendline='ols', 
+                    trendline_color_override='black', height=800)
+
+    return fig
+
+def vis3():
+
+    query = f'''
+        SELECT * FROM {USTRADE_v_USWTRADE}
+    '''
+    
+    # create dataframe from query
+    ustrade_v_uswtrade = pd.read_sql(query, conn)
+
+    df = pd.DataFrame()
+
+    print("Building ustrade_v_uswtrade df")
+    for ustrade in ustrade_v_uswtrade['USTRADE']:
+        # print("In the for loop to build df2")
+        query = f'''
+            SELECT *
+                FROM {USTRADE_v_USWTRADE}
+                WHERE {USTRADE_v_USWTRADE}.USTRADE = {ustrade}
+    '''
+        df = pd.concat([df, pd.read_sql(query, conn)])
+
+    df.rename(columns = {'USTRADE':'US Retail Employees', 'USWTRADE':'US Wholesale Employees'}, inplace = True)
+
+    print("The df should be created now")
+    fig = px.scatter(df, x='US Retail Employees', y='US Wholesale Employees', 
+                    title='Number of US Retail Employees vs Number of US Wholesale Employees', 
+                    trendline='ols', trendline_color_override='black', height=800)
+
+    return fig
+
 app.layout = html.Div(children=[
 
     # title
@@ -86,6 +152,18 @@ app.layout = html.Div(children=[
     dcc.Graph(
         id='vis1',
         figure=vis1()
+    ),
+
+    # CPI_v_RPI graph
+    dcc.Graph(
+        id='vis2',
+        figure=vis2()
+    ),
+
+    # USTRADE_v_USWTRADE graph
+    dcc.Graph(
+        id='vis3',
+        figure=vis3()
     ),
 
     # example dropdown
