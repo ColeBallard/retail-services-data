@@ -10,7 +10,7 @@ import os
 
 # get environment variables from config if production environment
 if os.getenv("app_environment") != "production":
-    from config import database, user, password, dateTable, macroTable, NAICS_NAPCS, NAICSTable, NAPCSTable, salesTable, CPI_v_RPI, USTRADE_v_USWTRADE, serverName
+    from config import database, user, password, dateTable, macroTable, NAICS_NAPCS, NAICSTable, NAPCSTable, salesTable, CPI_v_RPI, USTRADE_v_USWTRADE, Adjusted_Sales_by_Date, serverName
 
 # get environment variables from heroku if development environment
 else:
@@ -23,6 +23,7 @@ else:
     salesTable = os.getenv("salesTable")
     CPI_v_RPI = os.getenv("CPI_v_RPI")
     USTRADE_v_USWTRADE = os.getenv("USTRADE_v_USWTRADE")
+    Adjusted_Sales_by_Date = os.getenv("Adjusted_Sales_by_Date")
     user = os.getenv("user")
     password = os.getenv("password")
     serverName = os.getenv("serverName")
@@ -31,8 +32,9 @@ server = flask.Flask(__name__)
 
 app = Dash(__name__, external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css'], server = server)
 
-dash.register_page("home",  path='/', layout=html.Div('Home Page'))
-dash.register_page("analytics", layout=html.Div('Analytics'))
+# # Was trying to implement pages with the below code, but stopped trying. We can remove this probably
+# dash.register_page("home",  path='/', layout=html.Div('Home Page'))
+# dash.register_page("analytics", layout=html.Div('Analytics'))
 
 # set parameters for connection string
 params = urllib.parse.quote_plus("DRIVER={ODBC Driver 17 for SQL Server};"
@@ -60,6 +62,8 @@ def vis1():
 
     df = pd.DataFrame()
 
+    print("Building top3naics df")
+
     for naicsid in top3naics['NAICSID']:
         query = f'''
             SELECT TOP 3 {NAICSTable}.[Meaning of NAICS code (NAICS2017_LABEL)], {NAPCSTable}.[Meaning of NAPCS collection code (NAPCS2017_LABEL)], [Sales, value of shipments, or revenue of NAPCS collection code ($1,000) (NAPCSDOL)]
@@ -79,6 +83,38 @@ def vis1():
     return fig
 
 def vis2():
+
+    query = f'''
+        SELECT * FROM {Adjusted_Sales_by_Date}
+    '''
+    
+    # create dataframe from query
+    sales_v_date = pd.read_sql(query, conn)
+
+    df = pd.DataFrame()
+
+    print("Building sales over time df")
+    for sales in sales_v_date['Adjusted_Sales']:
+        query = f'''
+            SELECT *
+                FROM {Adjusted_Sales_by_Date}
+                WHERE {Adjusted_Sales_by_Date}.[Adjusted_Sales] = {sales}
+    '''
+        df = pd.concat([df, pd.read_sql(query, conn)])
+        df["Date"] = df["Year"].astype(str) + '-' + df["Month"].astype(str)
+        df["Date"] = pd.to_datetime(df["Date"])
+
+    df.rename(columns = {'Adjusted_Sales':'Adjusted Sales'}, inplace = True)
+    df = df.drop(columns=['Month', 'Year'])
+    df = df.sort_values(by=["Date"])
+
+    fig = px.line(df, x='Date', y='Adjusted Sales', 
+                    title='US Retail Sales Over Time', 
+                    height=800)
+
+    return fig
+    
+def vis3():
 
     query = f'''
         SELECT * FROM {CPI_v_RPI}
@@ -108,7 +144,7 @@ def vis2():
 
     return fig
 
-def vis3():
+def vis4():
 
     query = f'''
         SELECT * FROM {USTRADE_v_USWTRADE}
@@ -154,16 +190,22 @@ app.layout = html.Div(children=[
         figure=vis1()
     ),
 
-    # CPI_v_RPI graph
+     # AdustedSales_v_Date graph
     dcc.Graph(
         id='vis2',
         figure=vis2()
     ),
 
-    # USTRADE_v_USWTRADE graph
+    # CPI_v_RPI graph
     dcc.Graph(
         id='vis3',
         figure=vis3()
+    ),
+
+    # USTRADE_v_USWTRADE graph
+    dcc.Graph(
+        id='vis4',
+        figure=vis4()
     ),
 
     # example dropdown
