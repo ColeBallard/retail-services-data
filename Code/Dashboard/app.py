@@ -88,24 +88,17 @@ def vis2():
     '''
     
     # create dataframe from query
-    sales_v_date = pd.read_sql(query, conn)
-
-    df = pd.DataFrame()
+    df = pd.read_sql(query, conn)
 
     print("Building sales over time df")
-    for sales in sales_v_date['Adjusted_Sales']:
-        query = f'''
-            SELECT *
-                FROM {Adjusted_Sales_by_Date}
-                WHERE {Adjusted_Sales_by_Date}.[Adjusted_Sales] = {sales}
-    '''
-        df = pd.concat([df, pd.read_sql(query, conn)])
+    for sale in df['Adjusted_Sales']:
         df["Date"] = df["Year"].astype(str) + '-' + df["Month"].astype(str)
         df["Date"] = pd.to_datetime(df["Date"])
 
     df.rename(columns = {'Adjusted_Sales':'Adjusted Sales'}, inplace = True)
-    df = df.drop(columns=['Month', 'Year'])
     df = df.sort_values(by=["Date"])
+    df = df.reset_index()
+    df = df.drop(columns=['index', 'Month', 'Year'])
 
     fig = px.line(df, x='Date', y='Adjusted Sales', 
                     title='US Retail Sales Over Time', 
@@ -121,21 +114,11 @@ def vis3():
     '''
     
     # create dataframe from query
-    allmacro_v_adjustedsales = pd.read_sql(query, conn)
-
-    df = pd.DataFrame()
-
-    print("Building cpi_v_adjustedsales df")
-    for cpi in allmacro_v_adjustedsales['CPI']:
-        query = f'''
-            SELECT CPI, Adjusted_Sales
-                FROM {AllMacro_v_AdjustedSales}
-                WHERE {AllMacro_v_AdjustedSales}.CPI = {cpi}
-    '''
-        df = pd.concat([df, pd.read_sql(query, conn)])
-        # print(df2)
+    df = pd.read_sql(query, conn)
 
     df.rename(columns = {'Adjusted_Sales':'Adjusted Sales', 'CPI':'CPI (2015 = 100)'}, inplace = True)
+
+    print(df.to_string())
 
     fig = px.scatter(df, x='CPI (2015 = 100)', y='Adjusted Sales', 
                     title='Consumer Price Index (CPI) vs Retail Sales', trendline='ols', 
@@ -151,18 +134,9 @@ def vis4():
     '''
     
     # create dataframe from query
-    allmacro_v_adjustedsales = pd.read_sql(query, conn)
-
-    df = pd.DataFrame()
+    df = pd.read_sql(query, conn)
 
     print("Building rpi_v_adjustedsales df")
-    for rpi in allmacro_v_adjustedsales['RPI']:
-        query = f'''
-            SELECT RPI, Adjusted_Sales
-                FROM {AllMacro_v_AdjustedSales}
-                WHERE {AllMacro_v_AdjustedSales}.RPI = {rpi}
-    '''
-        df = pd.concat([df, pd.read_sql(query, conn)])
 
     df.rename(columns = {'Adjusted_Sales':'Adjusted Sales', 'RPI':'RPI (USD, Billions)'}, inplace = True)
     
@@ -180,18 +154,9 @@ def vis5():
     '''
     
     # create dataframe from query
-    allmacro_v_adjustedsales = pd.read_sql(query, conn)
-
-    df = pd.DataFrame()
+    df = pd.read_sql(query, conn)
 
     print("Building ustrade_v_adjustedsales df")
-    for ustrade in allmacro_v_adjustedsales['USTRADE']:
-        query = f'''
-            SELECT USTRADE, Adjusted_Sales
-                FROM {AllMacro_v_AdjustedSales}
-                WHERE {AllMacro_v_AdjustedSales}.USTRADE = {ustrade}
-    '''
-        df = pd.concat([df, pd.read_sql(query, conn)])
 
     df.rename(columns = {'Adjusted_Sales':'Adjusted Sales', 'USTRADE':'Retail Employees'}, inplace = True)
 
@@ -209,18 +174,9 @@ def vis6():
     '''
     
     # create dataframe from query
-    allmacro_v_adjustedsales = pd.read_sql(query, conn)
-
-    df = pd.DataFrame()
+    df = pd.read_sql(query, conn)
 
     print("Building uswtrade_v_adjustedsales df")
-    for uswtrade in allmacro_v_adjustedsales['USWTRADE']:
-        query = f'''
-            SELECT USWTRADE, Adjusted_Sales
-                FROM {AllMacro_v_AdjustedSales}
-                WHERE {AllMacro_v_AdjustedSales}.USWTRADE = {uswtrade}
-    '''
-        df = pd.concat([df, pd.read_sql(query, conn)])
 
     df.rename(columns = {'Adjusted_Sales':'Adjusted Sales', 'USWTRADE':'Wholesale Employees'}, inplace = True)
 
@@ -240,7 +196,7 @@ app.layout = html.Div(children=[
         An overview of retail data over time in the United States. 
     '''),
 
-    # example graph
+    # top3naics graph
     dcc.Graph(
         id='vis1',
         figure=vis1()
@@ -293,14 +249,5 @@ def display_value(value):
 if __name__ == '__main__':
 
     app.run_server(debug=True)
-
-    # set parameters for connection string
-    params = urllib.parse.quote_plus("DRIVER={ODBC Driver 17 for SQL Server};"
-                                     "SERVER=" + serverName + ";"
-                                     "DATABASE=" + database + ";"
-                                     "UID=" + user + ";"
-                                     "PWD=" + password + ";")
-
-    engine = sa.create_engine('mssql+pyodbc:///?odbc_connect={}'.format(params))
 
 # local development server runs on http://127.0.0.1:8050/
