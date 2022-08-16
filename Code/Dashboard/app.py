@@ -10,7 +10,7 @@ import os
 
 # get environment variables from config if production environment
 if os.getenv("app_environment") != "production":
-    from config import database, user, password, dateTable, macroTable, NAICS_NAPCS, NAICSTable, NAPCSTable, salesTable, CPI_v_RPI, USTRADE_v_USWTRADE, Adjusted_Sales_by_Date, AllMacro_v_AdjustedSales, serverName
+    from config import database, user, password, dateTable, macroTable, NAICS_NAPCS, NAICSTable, NAPCSTable, salesTable, Adjusted_Sales_by_Date, AllMacro_v_AdjustedSales, serverName
 
 # get environment variables from heroku if development environment
 else:
@@ -21,8 +21,6 @@ else:
     NAICSTable = os.getenv("NAICSTable")
     NAPCSTable = os.getenv("NAPCSTable")
     salesTable = os.getenv("salesTable")
-    CPI_v_RPI = os.getenv("CPI_v_RPI")
-    USTRADE_v_USWTRADE = os.getenv("USTRADE_v_USWTRADE")
     Adjusted_Sales_by_Date = os.getenv("Adjusted_Sales_by_Date")
     AllMacro_v_AdjustedSales = os.getenv("AllMacro_v_AdjustedSales")
     user = os.getenv("user")
