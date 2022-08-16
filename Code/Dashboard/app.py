@@ -10,7 +10,7 @@ import os
 
 # get environment variables from config if production environment
 if os.getenv("app_environment") != "production":
-    from config import database, user, password, dateTable, macroTable, NAICS_NAPCS, NAICSTable, NAPCSTable, salesTable, CPI_v_RPI, USTRADE_v_USWTRADE, Adjusted_Sales_by_Date, serverName
+    from config import database, user, password, dateTable, macroTable, NAICS_NAPCS, NAICSTable, NAPCSTable, salesTable, CPI_v_RPI, USTRADE_v_USWTRADE, Adjusted_Sales_by_Date, AllMacro_v_AdjustedSales, serverName
 
 # get environment variables from heroku if development environment
 else:
@@ -24,6 +24,7 @@ else:
     CPI_v_RPI = os.getenv("CPI_v_RPI")
     USTRADE_v_USWTRADE = os.getenv("USTRADE_v_USWTRADE")
     Adjusted_Sales_by_Date = os.getenv("Adjusted_Sales_by_Date")
+    AllMacro_v_AdjustedSales = os.getenv("AllMacro_v_AdjustedSales")
     user = os.getenv("user")
     password = os.getenv("password")
     serverName = os.getenv("serverName")
@@ -117,29 +118,29 @@ def vis2():
 def vis3():
 
     query = f'''
-        SELECT * FROM {CPI_v_RPI}
+        SELECT CPI, Adjusted_Sales 
+            FROM {AllMacro_v_AdjustedSales}
     '''
     
     # create dataframe from query
-    cpi_v_rpi = pd.read_sql(query, conn)
+    allmacro_v_adjustedsales = pd.read_sql(query, conn)
 
     df = pd.DataFrame()
 
-    print("Building cpi_v_rpi df")
-    for cpi in cpi_v_rpi['CPI']:
-        # print("In the for loop to build df2")
+    print("Building cpi_v_adjustedsales df")
+    for cpi in allmacro_v_adjustedsales['CPI']:
         query = f'''
-            SELECT *
-                FROM {CPI_v_RPI}
-                WHERE {CPI_v_RPI}.CPI = {cpi}
+            SELECT CPI, Adjusted_Sales
+                FROM {AllMacro_v_AdjustedSales}
+                WHERE {AllMacro_v_AdjustedSales}.CPI = {cpi}
     '''
         df = pd.concat([df, pd.read_sql(query, conn)])
         # print(df2)
 
-    df.rename(columns = {'RPI':'RPI (Billions of US Dollars', 'CPI':'CPI (2015 = 100)'}, inplace = True)
+    df.rename(columns = {'Adjusted_Sales':'Adjusted Sales', 'CPI':'CPI (2015 = 100)'}, inplace = True)
 
-    fig = px.scatter(df, x='RPI (Billions of US Dollars', y='CPI (2015 = 100)', 
-                    title='Consumer Price Index (CPI) vs Real Person Income (RPI)', trendline='ols', 
+    fig = px.scatter(df, x='CPI (2015 = 100)', y='Adjusted Sales', 
+                    title='Consumer Price Index (CPI) vs Retail Sales', trendline='ols', 
                     trendline_color_override='black', height=800)
 
     return fig
@@ -147,30 +148,87 @@ def vis3():
 def vis4():
 
     query = f'''
-        SELECT * FROM {USTRADE_v_USWTRADE}
+        SELECT RPI, Adjusted_Sales 
+            FROM {AllMacro_v_AdjustedSales}
     '''
     
     # create dataframe from query
-    ustrade_v_uswtrade = pd.read_sql(query, conn)
+    allmacro_v_adjustedsales = pd.read_sql(query, conn)
 
     df = pd.DataFrame()
 
-    print("Building ustrade_v_uswtrade df")
-    for ustrade in ustrade_v_uswtrade['USTRADE']:
-        # print("In the for loop to build df2")
+    print("Building rpi_v_adjustedsales df")
+    for rpi in allmacro_v_adjustedsales['RPI']:
         query = f'''
-            SELECT *
-                FROM {USTRADE_v_USWTRADE}
-                WHERE {USTRADE_v_USWTRADE}.USTRADE = {ustrade}
+            SELECT RPI, Adjusted_Sales
+                FROM {AllMacro_v_AdjustedSales}
+                WHERE {AllMacro_v_AdjustedSales}.RPI = {rpi}
     '''
         df = pd.concat([df, pd.read_sql(query, conn)])
 
-    df.rename(columns = {'USTRADE':'US Retail Employees', 'USWTRADE':'US Wholesale Employees'}, inplace = True)
+    df.rename(columns = {'Adjusted_Sales':'Adjusted Sales', 'RPI':'RPI (USD, Billions)'}, inplace = True)
+    
+    fig = px.scatter(df, x='RPI (USD, Billions)', y='Adjusted Sales', 
+                    title='Real Person Income (RPI) vs Retail Sales', trendline='ols', 
+                    trendline_color_override='black', height=800)
 
-    print("The df should be created now")
-    fig = px.scatter(df, x='US Retail Employees', y='US Wholesale Employees', 
-                    title='Number of US Retail Employees vs Number of US Wholesale Employees', 
-                    trendline='ols', trendline_color_override='black', height=800)
+    return fig
+
+def vis5():
+
+    query = f'''
+        SELECT USTRADE, Adjusted_Sales 
+            FROM {AllMacro_v_AdjustedSales}
+    '''
+    
+    # create dataframe from query
+    allmacro_v_adjustedsales = pd.read_sql(query, conn)
+
+    df = pd.DataFrame()
+
+    print("Building ustrade_v_adjustedsales df")
+    for ustrade in allmacro_v_adjustedsales['USTRADE']:
+        query = f'''
+            SELECT USTRADE, Adjusted_Sales
+                FROM {AllMacro_v_AdjustedSales}
+                WHERE {AllMacro_v_AdjustedSales}.USTRADE = {ustrade}
+    '''
+        df = pd.concat([df, pd.read_sql(query, conn)])
+
+    df.rename(columns = {'Adjusted_Sales':'Adjusted Sales', 'USTRADE':'Retail Employees'}, inplace = True)
+
+    fig = px.scatter(df, x='Retail Employees', y='Adjusted Sales', 
+                    title='Number of Retail Employees vs Retail Sales', trendline='ols', 
+                    trendline_color_override='black', height=800)
+
+    return fig
+
+def vis6():
+
+    query = f'''
+        SELECT USWTRADE, Adjusted_Sales 
+            FROM {AllMacro_v_AdjustedSales}
+    '''
+    
+    # create dataframe from query
+    allmacro_v_adjustedsales = pd.read_sql(query, conn)
+
+    df = pd.DataFrame()
+
+    print("Building uswtrade_v_adjustedsales df")
+    for uswtrade in allmacro_v_adjustedsales['USWTRADE']:
+        query = f'''
+            SELECT USWTRADE, Adjusted_Sales
+                FROM {AllMacro_v_AdjustedSales}
+                WHERE {AllMacro_v_AdjustedSales}.USWTRADE = {uswtrade}
+    '''
+        df = pd.concat([df, pd.read_sql(query, conn)])
+
+    df.rename(columns = {'Adjusted_Sales':'Adjusted Sales', 'USWTRADE':'Wholesale Employees'}, inplace = True)
+
+    fig = px.scatter(df, x='Wholesale Employees', y='Adjusted Sales', 
+                    title='Number of Wholesale Employees vs Retail Sales', trendline='ols', 
+                    trendline_color_override='black', height=800)
 
     return fig
 
@@ -196,16 +254,28 @@ app.layout = html.Div(children=[
         figure=vis2()
     ),
 
-    # CPI_v_RPI graph
+    # cpi_v_adjustedsales graph
     dcc.Graph(
         id='vis3',
         figure=vis3()
     ),
 
-    # USTRADE_v_USWTRADE graph
+    # rpi_v_adjustedsales graph
     dcc.Graph(
         id='vis4',
         figure=vis4()
+    ),
+
+    # ustrade_v_adjustedsales graph
+    dcc.Graph(
+        id='vis5',
+        figure=vis5()
+    ),
+
+    # uswtrade_v_adjustedsales graph
+    dcc.Graph(
+        id='vis6',
+        figure=vis6()
     ),
 
     # example dropdown
