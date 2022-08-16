@@ -161,7 +161,7 @@ def vis5():
     df.rename(columns = {'Adjusted_Sales':'Adjusted Sales', 'USTRADE':'Retail Employees'}, inplace = True)
 
     fig = px.scatter(df, x='Retail Employees', y='Adjusted Sales', 
-                    title='Number of Retail Employees vs Retail Sales', trendline='ols', 
+                    title='Number of Retail Employees vs Retail Sales', 
                     trendline_color_override='black', height=800)
 
     return fig
@@ -181,7 +181,7 @@ def vis6():
     df.rename(columns = {'Adjusted_Sales':'Adjusted Sales', 'USWTRADE':'Wholesale Employees'}, inplace = True)
 
     fig = px.scatter(df, x='Wholesale Employees', y='Adjusted Sales', 
-                    title='Number of Wholesale Employees vs Retail Sales', trendline='ols', 
+                    title='Number of Wholesale Employees vs Retail Sales', 
                     trendline_color_override='black', height=800)
 
     return fig
