@@ -298,6 +298,7 @@ app.layout = html.Div([
                                 dbc.Card(
                                     dbc.CardBody([
                                         html.Div([
+                                            html.H6('Overview', style={'color':'#aaa'}),
                                             html.P('''
                                             For this dashboard we looked at nationwide retail data, including product and industry classifications 
                                             from 1960 to 2022.
@@ -319,14 +320,14 @@ app.layout = html.Div([
                                 dbc.Card(
                                     dbc.CardBody([
                                         html.Div([
-                                            html.H6('Sources'),
-                                            html.A('Monthly Retail Trade Report', href='https://www.census.gov/retail/index.html'),
+                                            html.H6('The Team'),
+                                            html.A('Nathaniel Van Schyndel', href='https://www.linkedin.com/in/nathaniel-van-schyndel-764b9b148/'),
                                             html.Br(),
-                                            html.A('Consumer Price Index (CPI) United States', href='https://www.kaggle.com/datasets/sfktrkl/consumer-price-index-cpi-united-states'),
+                                            html.A('James Miller', href='https://www.linkedin.com/in/james-miller-0b994036/'),
                                             html.Br(),
-                                            html.A('Macroeconomics US', href='https://www.kaggle.com/datasets/denychaen/usmacro?select=US_MACRO110522.csv'),
+                                            html.A('Gavan VanOver', href='https://www.linkedin.com/in/gavan-vanover-041160223/'),
                                             html.Br(),
-                                            html.A('All Sectors: Products by Industry for the U.S.', href='https://data.census.gov/cedsci/table?q=ECNNAPCSPRD2017.EC1700NAPCSPRDIND&n=N0600.44&tid=ECNNAPCSPRD2017.EC1700NAPCSPRDIND&hidePreview=true'),
+                                            html.A('Cole Ballard', href='https://www.linkedin.com/in/cole-ballard/'),
                                         ], style={'textAlign': 'center'})
                                     ])
                                 ),
@@ -419,7 +420,28 @@ app.layout = html.Div([
                 dbc.Col([
                     drawFigure(vis6()) 
                 ], width=6),
-            ], align='center'),                  
+            ], align='center'), 
+            html.Br(),
+            dbc.Row([
+                dbc.Col([
+                    html.Div([
+                        dbc.Card(
+                            dbc.CardBody([
+                                html.Div([
+                                    html.H6('Sources'),
+                                    html.A('Monthly Retail Trade Report', href='https://www.census.gov/retail/index.html'),
+                                    html.Br(),
+                                    html.A('Consumer Price Index (CPI) United States', href='https://www.kaggle.com/datasets/sfktrkl/consumer-price-index-cpi-united-states'),
+                                    html.Br(),
+                                    html.A('Macroeconomics US', href='https://www.kaggle.com/datasets/denychaen/usmacro?select=US_MACRO110522.csv'),
+                                    html.Br(),
+                                    html.A('All Sectors: Products by Industry for the U.S.', href='https://data.census.gov/cedsci/table?q=ECNNAPCSPRD2017.EC1700NAPCSPRDIND&n=N0600.44&tid=ECNNAPCSPRD2017.EC1700NAPCSPRDIND&hidePreview=true'),
+                                ], style={'textAlign': 'center'})
+                            ])
+                        ),
+                    ])
+                ], width=3)
+            ])                 
         ]), color = 'dark'
     )
 ])    
