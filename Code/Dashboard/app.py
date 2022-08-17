@@ -159,6 +159,8 @@ def vis4():
                     title='Real Person Income (RPI) vs Retail Sales', trendline='ols', 
                     trendline_color_override='white')
 
+    fig.update_yaxes(range=[250000, 900000])
+
     fig.update_layout(title_x=0.5)
 
     return fig
@@ -226,8 +228,6 @@ def vis7():
 
     # remove duplicate DateID column
     df = df.loc[:,~df.columns.duplicated()].copy()
-
-    print(df.columns[3:31])
 
     fig = px.line(df, x='Date', y=df.columns[2:31], title='US Retail Sales Over Time', labels={'value':'Adjusted Sales (USD, Millions)', 'variable': 'Retail Establishment'})
 
