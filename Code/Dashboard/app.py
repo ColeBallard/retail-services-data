@@ -215,7 +215,7 @@ def vis7():
         SELECT * 
             FROM {Sales_by_Category}
             JOIN {dateTable} ON {Sales_by_Category}.DateID = {dateTable}.DateID
-'''
+    '''
     df = pd.read_sql(query, conn)
 
     df["Date"] = df["Year"].astype(str) + '-' + df["Month"].astype(str)
@@ -239,6 +239,9 @@ def vis7():
     fig.update_layout(title_x=0.5)
 
     return fig
+
+def vis8():
+    #include note that says data is being updated daily to make stronger predictions
 
 def drawFigure(fig):
     return  html.Div([
