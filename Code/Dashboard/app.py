@@ -177,9 +177,9 @@ def vis5():
 
     print("Building ustrade_v_adjustedsales df")
 
-    df.rename(columns = {'Adjusted_Sales':'Adjusted Sales (USD, Millions)', 'USTRADE':'Retail Employees'}, inplace = True)
+    df.rename(columns = {'Adjusted_Sales':'Adjusted Sales (USD, Millions)', 'USTRADE':'Retail Employees (Thousands of Persons)'}, inplace = True)
 
-    fig = px.scatter(df, x='Retail Employees', y='Adjusted Sales (USD, Millions)', 
+    fig = px.scatter(df, x='Retail Employees (Thousands of Persons)', y='Adjusted Sales (USD, Millions)', 
                     title='Number of Retail Employees vs Retail Sales')
 
     fig.update_layout(title_x=0.5)
@@ -198,9 +198,9 @@ def vis6():
 
     print("Building uswtrade_v_adjustedsales df")
 
-    df.rename(columns = {'Adjusted_Sales':'Adjusted Sales (USD, Millions)', 'USWTRADE':'Wholesale Employees'}, inplace = True)
+    df.rename(columns = {'Adjusted_Sales':'Adjusted Sales (USD, Millions)', 'USWTRADE':'Wholesale Employees (Thousands of Persons)'}, inplace = True)
 
-    fig = px.scatter(df, x='Wholesale Employees', y='Adjusted Sales (USD, Millions)', 
+    fig = px.scatter(df, x='Wholesale Employees (Thousands of Persons)', y='Adjusted Sales (USD, Millions)', 
                     title='Number of Wholesale Employees vs Retail Sales')
 
     fig.update_layout(title_x=0.5)
