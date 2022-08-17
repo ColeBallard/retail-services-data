@@ -90,7 +90,7 @@ def vis1():
     df['Product(s)'] = df['Product(s)'].replace(["Retail sales of footwear and footwear accessories"], "Footwear and <br>footwear accessories")
 
 
-    fig = px.bar(df, x='Retail Establishment', y='Sales (USD, Thousands)', title='2017 Top 3 Products Sold in Top 3 Types of Establishments by Sales', color='Product(s)', barmode='group')
+    fig = px.bar(df, x='Retail Establishment', y='Sales (USD, Thousands)', title='Top 3 Products Sold in Top 3 Types of Retail Establishments by Sales (2017)', color='Product(s)', barmode='group')
 
     fig.update_layout(title_x=0.5)
 
@@ -306,7 +306,7 @@ app.layout = html.Div([
                                             The goal of the time series analysis we made was to create a machine learning model that predicts future retail 
                                             sales in the United States.
                                             ''')
-                                        ], style={'textAlign': 'center'}) 
+                                        ], style={'textAlign': 'center', 'color': 'white'}) 
                                     ])
                                 ),
                             ])
@@ -342,7 +342,30 @@ app.layout = html.Div([
             dbc.Row([
                 dbc.Col([
                     drawFigure(vis7()) 
-                ], width=12),
+                ], width=10),
+                dbc.Col([
+                    html.Div([
+                        dbc.Card(
+                            dbc.CardBody([
+                                html.Div([
+                                    html.P([
+                                        html.Strong('Adjusted sales,'),
+                                        html.Span(
+                                        '''
+                                        also known as net sales, represent gross sales less returns and allowances. 
+                                        This measure is a gauge of market demand and pricing power, and is commonly used to determine relative 
+                                        market share for various industries including retail, apparel, manufacturing and technology hardware.
+                                        '''
+                                        )
+                                    ]),
+                                    html.P('''
+                                    Adjusted sales is a better indicator of relative commerce.
+                                    ''')
+                                ], style={'textAlign': 'center', 'color': 'white'}) 
+                            ])
+                        ),
+                    ])
+                ], width=2),
             ], align='center'), 
             html.Br(),
             dbc.Row([
@@ -353,6 +376,41 @@ app.layout = html.Div([
                     drawFigure(vis4())
                 ], width=6),
             ], align='center'), 
+            html.Br(),
+            dbc.Row([
+                dbc.Col([
+                    html.Div([
+                        dbc.Card(
+                            dbc.CardBody([
+                                html.Div([
+                                    html.P([
+                                        html.Strong('Consumer Price Index'),
+                                        html.Span(''' is the price of a weighted average market basket of consumer goods and 
+                                        services purchased by households and changes in measured CPI track changes in prices over time.
+                                        ''')
+                                    ]),
+                                ], style={'textAlign': 'center', 'color': 'white'}) 
+                            ])
+                        ),
+                    ])
+                ], width=6),
+                dbc.Col([
+                    html.Div([
+                        dbc.Card(
+                            dbc.CardBody([
+                                html.Div([
+                                    html.P([
+                                        html.Strong('Real Person Income'),
+                                        html.Span(''' is how much money an individual or entity makes after accounting for inflation and 
+                                        is sometimes called real wage.
+                                        ''')
+                                    ])
+                                ], style={'textAlign': 'center', 'color': 'white'}) 
+                            ])
+                        ),
+                    ])
+                ], width=6)
+            ]),
             html.Br(),
             dbc.Row([
                 dbc.Col([
