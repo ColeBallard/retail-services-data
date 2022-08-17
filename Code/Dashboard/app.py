@@ -264,9 +264,9 @@ def vis9():
 
     # 2.22% increase for CPI
 
-    df = pd.DataFrame(data={'Trend':['Predicted Adjusted <br> Retail Sales', 'Adjusted CPI', 'Adjusted RPI'], 'Quarterly Change':[0.0032, 0.0222, 0.0172]})
+    df = pd.DataFrame(data={'Trend':['Predicted Adjusted <br>Retail Sales', 'Adjusted CPI', 'Adjusted RPI'], 'Quarterly Change':[0.0032, 0.0222, 0.0172]})
 
-    fig = px.bar(df, x='Trend', y='Quarterly Change', title='Trends for Q1 2022', color='Trend', color_discrete_map = {'Predicted Adjusted <br> Retail Sales' : '#636efa', 'Adjusted CPI' : '#ffa15a', 'Adjusted RPI' : '#ab63fa'})
+    fig = px.bar(df, x='Trend', y='Quarterly Change', title='Trends for Q1 2022', color='Trend', color_discrete_map = {'Predicted Adjusted <br>Retail Sales' : '#636efa', 'Adjusted CPI' : '#ffa15a', 'Adjusted RPI' : '#ab63fa'})
 
     fig.update_layout(title_x=0.5)
 
