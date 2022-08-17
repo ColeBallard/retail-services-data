@@ -76,7 +76,7 @@ def vis1():
     '''
         df = pd.concat([df, pd.read_sql(query, conn)])
 
-    df.rename(columns = {'Meaning of NAICS code (NAICS2017_LABEL)':'Retail Establishment', 'Meaning of NAPCS collection code (NAPCS2017_LABEL)':'Product(s)', 'Sales, value of shipments, or revenue of NAPCS collection code ($1,000) (NAPCSDOL)':'Sales'}, inplace = True)
+    df.rename(columns = {'Meaning of NAICS code (NAICS2017_LABEL)':'Retail Establishment', 'Meaning of NAPCS collection code (NAPCS2017_LABEL)':'Product(s)', 'Sales, value of shipments, or revenue of NAPCS collection code ($1,000) (NAPCSDOL)':'Sales (USD, Thousands)'}, inplace = True)
     # labels={"Supermarkets and other grocery (except convenience) stores": "Supermarkets and other grocery <br> (except convenience) stores",  "Warehouse clubs and supercenters": "Warehouse clubs <br> and supercenters", "Electronic shopping and mail-order houses": "Electronic shopping and <br> mail-order houses"}
     df['Retail Establishment'] = df['Retail Establishment'].replace(["Supermarkets and other grocery (except convenience) stores"], "Supermarkets and <br> other grocery <br> (except convenience) stores")
     df['Retail Establishment'] = df['Retail Establishment'].replace(["Warehouse clubs and supercenters"], "Warehouse clubs <br> and supercenters")
@@ -90,7 +90,7 @@ def vis1():
     df['Product(s)'] = df['Product(s)'].replace(["Retail sales of footwear and footwear accessories"], "Footwear and <br>footwear accessories")
 
 
-    fig = px.bar(df, x='Retail Establishment', y='Sales', title='2017 Top 3 Products Sold in Top 3 Types of Establishments by Sales', color='Product(s)', barmode='group')
+    fig = px.bar(df, x='Retail Establishment', y='Sales (USD, Thousands)', title='2017 Top 3 Products Sold in Top 3 Types of Establishments by Sales', color='Product(s)', barmode='group')
 
     fig.update_layout(title_x=0.5)
 
