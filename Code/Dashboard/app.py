@@ -224,21 +224,17 @@ def vis7():
     df = df.reset_index()
     df = df.drop(columns=['index', 'Month', 'Year'])
 
-    # df.rename(columns = {'Meaning of NAICS code (NAICS2017_LABEL)':'Retail Establishment', 'Meaning of NAPCS collection code (NAPCS2017_LABEL)':'Product(s)', 'Sales, value of shipments, or revenue of NAPCS collection code ($1,000) (NAPCSDOL)':'Sales'}, inplace = True)
-    # # labels={"Supermarkets and other grocery (except convenience) stores": "Supermarkets and other grocery <br> (except convenience) stores",  "Warehouse clubs and supercenters": "Warehouse clubs <br> and supercenters", "Electronic shopping and mail-order houses": "Electronic shopping and <br> mail-order houses"}
-    # df['Retail Establishment'] = df['Retail Establishment'].replace(["Supermarkets and other grocery (except convenience) stores"], "Supermarkets and <br> other grocery <br> (except convenience) stores")
-    # df['Retail Establishment'] = df['Retail Establishment'].replace(["Warehouse clubs and supercenters"], "Warehouse clubs <br> and supercenters")
-    # df['Retail Establishment'] = df['Retail Establishment'].replace(["Electronic shopping and mail-order houses"], "Electronic shopping <br> and mail-order houses")
+    # remove duplicate DateID column
+    df = df.loc[:,~df.columns.duplicated()].copy()
 
-    # df['Product(s)'] = df['Product(s)'].replace(['Retail sales of food dry goods and other foods purchased for future consumption'], 'Food dry goods and <br>other foods purchased <br>for future consumption')
-    # df['Product(s)'] = df['Product(s)'].replace(['Retail sales of fresh fruit and vegetables'], 'Fresh fruit and vegetables')
-    # df['Product(s)'] = df['Product(s)'].replace(['Retail sales of fresh meat and poultry'], 'Fresh meat and poultry')
-    # df['Product(s)'] = df['Product(s)'].replace(['Retail sales of candy, prepackaged cookies, and snack foods'], 'Candy, prepackaged <br>cookies, and snack foods')
-    # df['Product(s)'] = df['Product(s)'].replace(["Retail sales of women's clothing"], "Women's clothing")
-    # df['Product(s)'] = df['Product(s)'].replace(["Retail sales of footwear and footwear accessories"], "Footwear and <br>footwear accessories")
+    print(df.columns[3:31])
 
+    fig = px.line(df, x='Date', y=df.columns[2:31], title='US Retail Sales Over Time', labels={'value':'Adjusted Sales (USD, Millions)', 'variable': 'Retail Establishment'})
 
-    fig = px.line(df, x='Date', y='Retail sales, total', title='Hey')
+    traces_to_hide = df.columns[3:31]
+
+    fig.for_each_trace(lambda trace: trace.update(visible="legendonly") 
+                   if trace.name in traces_to_hide else ())
 
     fig.update_layout(title_x=0.5)
 
@@ -273,7 +269,7 @@ app.layout = html.Div([
                             dbc.CardBody([
                                 html.Div([
                                     html.H1('Retail Service Data'),
-                                ], style={'textAlign': 'center'}) 
+                                ], style={'textAlign': 'center', 'color': 'white'}) 
                             ])
                         ),
                     ])
@@ -345,7 +341,7 @@ app.layout = html.Div([
             html.Br(),
             dbc.Row([
                 dbc.Col([
-                    drawFigure(vis2()) 
+                    drawFigure(vis7()) 
                 ], width=12),
             ], align='center'), 
             html.Br(),
@@ -365,15 +361,7 @@ app.layout = html.Div([
                 dbc.Col([
                     drawFigure(vis6()) 
                 ], width=6),
-            ], align='center'),
-            # dbc.Row([
-            #     dbc.Col([
-            #         drawFigure(vis7()) 
-            #     ], width=6),
-            #     dbc.Col([
-            #         drawFigure(vis7()) 
-            #     ], width=6),
-            # ], align='center'),                  
+            ], align='center'),                  
         ]), color = 'dark'
     )
 ])    
