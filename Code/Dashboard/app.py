@@ -131,9 +131,9 @@ def vis3():
     # create dataframe from query
     df = pd.read_sql(query, conn)
 
-    df.rename(columns = {'Adjusted_Sales':'Adjusted Sales (USD, Millions)', 'CPI':'CPI (2015 = 100)'}, inplace = True)
+    df.rename(columns = {'Adjusted_Sales':'Adjusted Retail Sales (USD, Millions)', 'CPI':'CPI (2015 = 100)'}, inplace = True)
 
-    fig = px.scatter(df, x='CPI (2015 = 100)', y='Adjusted Sales (USD, Millions)', 
+    fig = px.scatter(df, x='CPI (2015 = 100)', y='Adjusted Retail Sales (USD, Millions)', 
                     title='Consumer Price Index (CPI) vs Retail Sales', trendline='ols', 
                     trendline_color_override='white')
 
@@ -153,9 +153,9 @@ def vis4():
 
     print("Building rpi_v_adjustedsales df")
 
-    df.rename(columns = {'Adjusted_Sales':'Adjusted Sales (USD, Millions)', 'RPI':'RPI (USD, Billions)'}, inplace = True)
+    df.rename(columns = {'Adjusted_Sales':'Adjusted Retail Sales (USD, Millions)', 'RPI':'RPI (USD, Billions)'}, inplace = True)
     
-    fig = px.scatter(df, x='RPI (USD, Billions)', y='Adjusted Sales (USD, Millions)', 
+    fig = px.scatter(df, x='RPI (USD, Billions)', y='Adjusted Retail Sales (USD, Millions)', 
                     title='Real Person Income (RPI) vs Retail Sales', trendline='ols', 
                     trendline_color_override='white')
 
@@ -177,9 +177,9 @@ def vis5():
 
     print("Building ustrade_v_adjustedsales df")
 
-    df.rename(columns = {'Adjusted_Sales':'Adjusted Sales (USD, Millions)', 'USTRADE':'Retail Employees'}, inplace = True)
+    df.rename(columns = {'Adjusted_Sales':'Adjusted Retail Sales (USD, Millions)', 'USTRADE':'Retail Employees'}, inplace = True)
 
-    fig = px.scatter(df, x='Retail Employees', y='Adjusted Sales (USD, Millions)', 
+    fig = px.scatter(df, x='Retail Employees', y='Adjusted Retail Sales (USD, Millions)', 
                     title='Number of Retail Employees vs Retail Sales')
 
     fig.update_layout(title_x=0.5)
@@ -198,9 +198,9 @@ def vis6():
 
     print("Building uswtrade_v_adjustedsales df")
 
-    df.rename(columns = {'Adjusted_Sales':'Adjusted Sales (USD, Millions)', 'USWTRADE':'Wholesale Employees'}, inplace = True)
+    df.rename(columns = {'Adjusted_Sales':'Adjusted Retail Sales (USD, Millions)', 'USWTRADE':'Wholesale Employees'}, inplace = True)
 
-    fig = px.scatter(df, x='Wholesale Employees', y='Adjusted Sales (USD, Millions)', 
+    fig = px.scatter(df, x='Wholesale Employees', y='Adjusted Retail Sales (USD, Millions)', 
                     title='Number of Wholesale Employees vs Retail Sales')
 
     fig.update_layout(title_x=0.5)
