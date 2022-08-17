@@ -30,7 +30,7 @@ else:
 
 server = flask.Flask(__name__)
 
-app = Dash(__name__, external_stylesheets = [dbc.themes.SLATE], server = server)
+app = Dash(__name__, external_stylesheets = [dbc.themes.SLATE, dbc.icons.FONT_AWESOME], server = server)
 
 # # Was trying to implement pages with the below code, but stopped trying. We can remove this probably
 # dash.register_page("home",  path='/', layout=html.Div('Home Page'))
@@ -243,6 +243,37 @@ def vis7():
 def vis8():
     #include note that says data is being updated daily to make stronger predictions
 
+    # https://fred.stlouisfed.org/series/PCECTPI
+
+    mldf = pd.read_csv('../../Data/MLData.csv')
+
+    mldf.rename(columns = {'Unnamed: 0':'Date'}, inplace = True)
+
+    df = pd.DataFrame(data={'Quarter':['2021 Q3', '2021 Q4', 'Predicted 2022 Q1'], 'Adjusted Retail Sales (USD, Millions)':[mldf['Prediction'][1:4].sum(), mldf['Prediction'][4:7].sum(), mldf['Prediction'][7:10].sum()]})
+
+    fig = px.bar(df, x='Quarter', y='Adjusted Retail Sales (USD, Millions)', title='Predicted Retail Sales for the next Quarter', color='Quarter', color_discrete_map = {'2021 Q3' : '#646cfc', '2021 Q4' : '#646cfc', 'Predicted 2022 Q1' : '#04cc94'})
+
+    fig.update_layout(title_x=0.5)
+
+    fig.update_layout(yaxis_range=[1600000,1680000])
+
+    return fig
+
+def vis9():
+    # 1.72% increase for RPI
+
+    # 2.22% increase for CPI
+
+    df = pd.DataFrame(data={'Trend':['Predicted Adjusted <br> Retail Sales', 'Adjusted CPI', 'Adjusted RPI'], 'Quarterly Change':[0.0032, 0.0222, 0.0172]})
+
+    fig = px.bar(df, x='Trend', y='Quarterly Change', title='Trends for Q1 2022', color='Trend', color_discrete_map = {'Predicted Adjusted <br> Retail Sales' : '#636efa', 'Adjusted CPI' : '#ffa15a', 'Adjusted RPI' : '#ab63fa'})
+
+    fig.update_layout(title_x=0.5)
+
+    fig.update_layout(yaxis_tickformat = '.1%')
+
+    return fig
+
 def drawFigure(fig):
     return  html.Div([
         dbc.Card(
@@ -305,11 +336,11 @@ app.layout = html.Div([
                                             html.P('''
                                             For this dashboard we looked at nationwide retail data, including product and industry classifications 
                                             from 1960 to 2022.
-                                            '''),
+                                            ''', style={'line-height': '165%'}),
                                             html.P('''
                                             The goal of the time series analysis we made was to create a machine learning model that predicts future retail 
                                             sales in the United States.
-                                            ''')
+                                            ''', style={'line-height': '165%'})
                                         ], style={'textAlign': 'center', 'color': 'white'}) 
                                     ])
                                 ),
@@ -361,10 +392,10 @@ app.layout = html.Div([
                                         market share for various industries including retail, apparel, manufacturing and technology hardware.
                                         '''
                                         )
-                                    ]),
+                                    ], style={'line-height': '160%'}),
                                     html.P('''
                                     Adjusted sales is a better indicator of relative commerce.
-                                    ''')
+                                    ''', style={'line-height': '160%'})
                                 ], style={'textAlign': 'center', 'color': 'white'}) 
                             ])
                         ),
@@ -392,7 +423,7 @@ app.layout = html.Div([
                                         html.Span(''' is the price of a weighted average market basket of consumer goods and 
                                         services purchased by households and changes in measured CPI track changes in prices over time.
                                         ''')
-                                    ]),
+                                    ], style={'line-height': '175%'}),
                                 ], style={'textAlign': 'center', 'color': 'white'}) 
                             ])
                         ),
@@ -408,7 +439,7 @@ app.layout = html.Div([
                                         html.Span(''' is how much money an individual or entity makes after accounting for inflation and 
                                         is sometimes called real wage.
                                         ''')
-                                    ])
+                                    ], style={'line-height': '175%'})
                                 ], style={'textAlign': 'center', 'color': 'white'}) 
                             ])
                         ),
@@ -423,6 +454,56 @@ app.layout = html.Div([
                 dbc.Col([
                     drawFigure(vis6()) 
                 ], width=6),
+            ], align='center'), 
+            html.Br(),
+            dbc.Row([
+                dbc.Col([
+                    drawFigure(vis9()) 
+                ], width=9),
+                dbc.Col([
+                    dbc.Row([
+                        dbc.Col([
+                            html.Div([
+                                dbc.Card(
+                                    dbc.CardBody([
+                                        html.Div([
+                                            html.H5([
+                                                html.Span('Based on our time series model, Adjusted Retail Sales are predicted to increase by '),
+                                                html.Strong('0.32%', style={'color': 'red'}),
+                                                html.Span(' for Q1 2022.')
+                                            ], style={'line-height': '200%'})
+                                        ], style={'textAlign': 'center', 'color': 'white'})
+                                    ])
+                                ),
+                            ])
+                        ], width=12),
+                    ]),
+                    html.Br(),
+                    dbc.Row([
+                        dbc.Col([
+                            html.Div([
+                                dbc.Card(
+                                    dbc.CardBody([
+                                        html.Div([
+                                            html.P([
+                                                html.Span('Consumer Price Index (CPI) is projected to increase almost '),
+                                                html.Strong('7 times'),
+                                                html.Span(' as much as Adjusted Retail Sales while Real Person Income (RPI) is supposed to increase by over '),
+                                                html.Strong('5 times'),
+                                                html.Span(' as much as Adjusted Retail Sales.')
+                                            ], style={'line-height': '175%'}),
+                                            html.P([
+                                                html.Span('Data from '),
+                                                html.A('FRED Economic Data', href='https://fred.stlouisfed.org/'),
+                                                html.Span('.'),
+                                            ])
+                                        ], style={'textAlign': 'center', 'color': 'white'})
+                                    ])
+                                ),
+                            ])
+                        ], width=12)
+                    ]),
+                ], width=3),
             ], align='center'), 
             html.Br(),
             dbc.Row([
@@ -443,7 +524,26 @@ app.layout = html.Div([
                             ])
                         ),
                     ])
-                ], width=3)
+                ], width=4),
+                dbc.Col([
+                    html.Div([
+                        dbc.Card(
+                            dbc.CardBody([
+                                html.Div([
+                                    html.A([
+                                        html.I(className="fa-brands fa-github", style={'font-size': '7.5em'})
+                                    ], href='https://github.com/ColeBallard/retail-services-data', style={'padding':'48px'}),
+                                    html.A([
+                                        html.I(className="fa-brands fa-trello", style={'font-size': '7.5em'})
+                                    ], href='https://trello.com/b/mZfSYbxw/capstonedev10', style={'padding':'48px'}),
+                                    html.A([
+                                        html.Img(src='../assets/dev10.ico', style={'width': 105, 'vertical-align': '-7px'})
+                                    ], href='https://www.genesis10.com/dev10', style={'padding':'48px'})
+                                ], style={'textAlign': 'center'})
+                            ])
+                        ),
+                    ])
+                ], width=8)
             ])                 
         ]), color = 'dark'
     )
