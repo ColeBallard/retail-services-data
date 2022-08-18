@@ -1,5 +1,7 @@
 drop table if exists SalesTable;
 GO
+drop table if exists Sales_by_categoryTable;
+GO
 drop table if exists NAICS_NAPCS;
 GO
 drop table if exists MacroTable;
@@ -67,4 +69,41 @@ CREATE TABLE NAICS_NAPCS (
     CONSTRAINT fk_NAISC_NAPCS_NAPCSID
         FOREIGN KEY (NAPCSID)
         REFERENCES NAPCSTable(NAPCSID)
+);
+
+CREATE TABLE Sales_by_categoryTable (
+    Sales_by_categoryID INT PRIMARY KEY IDENTITY(1,1),
+    DateID INT,
+    [Retail sales, total] decimal(18,2),
+    [Motor vehicle and parts dealers] decimal(18,2),
+    [Automotive parts, acc., and tire stores] decimal(18,2),
+    [Furniture and home furnishings stores] decimal(18,2),
+    [Electronics and appliance stores] decimal(18,2),
+    [Building mat. and garden equip. and supplies dealers] decimal(18,2),
+    [Building mat. and supplies dealers] decimal(18,2),
+    [Food and beverage stores] decimal(18,2),
+    [Grocery stores] decimal(18,2),
+    [Beer, wine and liquor stores] decimal(18,2),
+    [Health and personal care stores] decimal(18,2),
+    [Pharmacies and drug stores] decimal(18,2),
+    [Gasoline stations] decimal(18,2),
+    [Clothing and clothing access. stores] decimal(18,2),
+    [Clothing stores] decimal(18,2),
+    [Men's clothing stores] decimal(18,2), 
+    [Women's clothing stores] decimal(18,2),
+    [Shoe stores] decimal(18,2),
+    [Jewelry stores] decimal(18,2),
+    [Sporting goods, hobby, musical instrument, and book stores] decimal(18,2),
+    [General merchandise stores] decimal(18,2),
+    [Department stores] decimal(18,2),
+    [Other general merchandise stores] decimal(18,2), 
+    [Warehouse clubs and superstores] decimal(18,2),
+    [All other gen. merchandise stores] decimal(18,2),
+    [Miscellaneous stores retailers] decimal(18,2),
+    [Nonstore retailers] decimal(18,2),
+    [Electronic shopping and mail order houses] decimal(18,2),
+    [Fuel dealers] decimal(18,2),
+    CONSTRAINT fk_Sales_by_categoryTable_DateID
+        FOREIGN KEY (DateID)
+        REFERENCES DateTable(DateID),
 );
