@@ -1,6 +1,7 @@
 from dash import Dash, dcc, html
 import dash_bootstrap_components as dbc
 import plotly.express as px
+import plotly.graph_objects as go
 import pandas as pd
 from dash.dependencies import Input, Output
 import urllib
@@ -285,10 +286,19 @@ def vis9():
 def vis10():
     mldf = pd.read_csv('assets/MLData.csv')
 
+    defdf = pd.read_csv('assets/defdata.csv')
+
+    print(defdf.to_string)
+
     mldf.rename(columns = {'Unnamed: 0':'Date'}, inplace = True)
 
-    fig = px.line(mldf, x='Date', y='Prediction', labels={'Prediction':'Adjusted Retail Sales (USD, Millions)'}, 
+    defdf.rename(columns = {'Unnamed: 0':'Date'}, inplace = True)
+
+    fig = px.line(mldf, x='Date', y='Prediction', labels={'Prediction': 'Adjusted Retail Sales (USD, Millions)'},
                     title='Monthly Retail Sales')
+
+    fig.add_trace(go.Scatter(x = defdf['Date'], y = defdf['Retail sales, total'], name='Actual Retail sales, total'))
+    fig.add_trace(go.Scatter(x = mldf['Date'], y = mldf['Prediction'], name='Predicted Retail sales, total'))
 
     fig.update_layout(title_x=0.5)
 
