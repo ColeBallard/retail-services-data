@@ -264,6 +264,14 @@ def vis9():
 
     # 2.22% increase for CPI
 
+    # 0.01% increase for RPI
+
+    # 0.73% increase for CPI
+
+    # 553309.8086125777
+    # 554708.300897474
+    # 555813.092349442
+
     df = pd.DataFrame(data={'Trend':['Predicted Adjusted <br>Retail Sales', 'Adjusted CPI', 'Adjusted RPI'], 'Quarterly Change':[0.0032, 0.0222, 0.0172]})
 
     fig = px.bar(df, x='Trend', y='Quarterly Change', title='Trends for Q1 2022', color='Trend', color_discrete_map = {'Predicted Adjusted <br>Retail Sales' : '#636efa', 'Adjusted CPI' : '#ffa15a', 'Adjusted RPI' : '#ab63fa'})
@@ -271,6 +279,18 @@ def vis9():
     fig.update_layout(title_x=0.5)
 
     fig.update_layout(yaxis_tickformat = '.1%')
+
+    return fig
+
+def vis10():
+    mldf = pd.read_csv('../../Data/MLData.csv')
+
+    mldf.rename(columns = {'Unnamed: 0':'Date'}, inplace = True)
+
+    fig = px.line(mldf, x='Date', y='Prediction', labels={'Prediction':'Adjusted Retail Sales (USD, Millions)'}, 
+                    title='Monthly Retail Sales')
+
+    fig.update_layout(title_x=0.5)
 
     return fig
 
@@ -458,53 +478,59 @@ app.layout = html.Div([
             html.Br(),
             dbc.Row([
                 dbc.Col([
-                    drawFigure(vis9()) 
-                ], width=9),
-                dbc.Col([
-                    dbc.Row([
-                        dbc.Col([
-                            html.Div([
-                                dbc.Card(
-                                    dbc.CardBody([
-                                        html.Div([
-                                            html.H5([
-                                                html.Span('Based on our time series model, Adjusted Retail Sales are predicted to increase by '),
-                                                html.Strong('0.32%', style={'color': 'red'}),
-                                                html.Span(' for Q1 2022.')
-                                            ], style={'line-height': '200%'})
-                                        ], style={'textAlign': 'center', 'color': 'white'})
-                                    ])
-                                ),
-                            ])
-                        ], width=12),
-                    ]),
-                    html.Br(),
-                    dbc.Row([
-                        dbc.Col([
-                            html.Div([
-                                dbc.Card(
-                                    dbc.CardBody([
-                                        html.Div([
-                                            html.P([
-                                                html.Span('Consumer Price Index (CPI) is projected to increase almost '),
-                                                html.Strong('7 times'),
-                                                html.Span(' as much as Adjusted Retail Sales while Real Person Income (RPI) is supposed to increase by over '),
-                                                html.Strong('5 times'),
-                                                html.Span(' as much as Adjusted Retail Sales.')
-                                            ], style={'line-height': '175%'}),
-                                            html.P([
-                                                html.Span('Data from '),
-                                                html.A('FRED Economic Data', href='https://fred.stlouisfed.org/'),
-                                                html.Span('.'),
-                                            ])
-                                        ], style={'textAlign': 'center', 'color': 'white'})
-                                    ])
-                                ),
-                            ])
-                        ], width=12)
-                    ]),
-                ], width=3),
+                    drawFigure(vis8()) 
+                ], width=12),
+                # dbc.Col([
+                #     dbc.Row([
+                #         dbc.Col([
+                #             html.Div([
+                #                 dbc.Card(
+                #                     dbc.CardBody([
+                #                         html.Div([
+                #                             html.H5([
+                #                                 html.Span('Based on our time series model, Adjusted Retail Sales are predicted to increase by '),
+                #                                 html.Strong('0.32%', style={'color': 'red'}),
+                #                                 html.Span(' for Q1 2022.')
+                #                             ], style={'line-height': '200%'})
+                #                         ], style={'textAlign': 'center', 'color': 'white'})
+                #                     ])
+                #                 ),
+                #             ])
+                #         ], width=12),
+                #     ]),
+                #     html.Br(),
+                #     dbc.Row([
+                #         dbc.Col([
+                #             html.Div([
+                #                 dbc.Card(
+                #                     dbc.CardBody([
+                #                         html.Div([
+                #                             html.P([
+                #                                 html.Span('Consumer Price Index (CPI) is projected to increase almost '),
+                #                                 html.Strong('7 times'),
+                #                                 html.Span(' as much as Adjusted Retail Sales while Real Person Income (RPI) is supposed to increase by over '),
+                #                                 html.Strong('5 times'),
+                #                                 html.Span(' as much as Adjusted Retail Sales.')
+                #                             ], style={'line-height': '175%'}),
+                #                             html.P([
+                #                                 html.Span('Data from '),
+                #                                 html.A('FRED Economic Data', href='https://fred.stlouisfed.org/'),
+                #                                 html.Span('.'),
+                #                             ])
+                #                         ], style={'textAlign': 'center', 'color': 'white'})
+                #                     ])
+                #                 ),
+                #             ])
+                #         ], width=12)
+                #     ]),
+                # ], width=3),
             ], align='center'), 
+            html.Br(),
+            dbc.Row([
+                dbc.Col([
+                    drawFigure(vis10()) 
+                ], width=12),
+            ]),
             html.Br(),
             dbc.Row([
                 dbc.Col([
