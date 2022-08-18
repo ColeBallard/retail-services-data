@@ -245,7 +245,7 @@ def vis8():
 
     # https://fred.stlouisfed.org/series/PCECTPI
 
-    mldf = pd.read_csv('../../Data/MLData.csv')
+    mldf = pd.read_csv('assets/MLData.csv')
 
     mldf.rename(columns = {'Unnamed: 0':'Date'}, inplace = True)
 
@@ -283,7 +283,7 @@ def vis9():
     return fig
 
 def vis10():
-    mldf = pd.read_csv('../../Data/MLData.csv')
+    mldf = pd.read_csv('assets/MLData.csv')
 
     mldf.rename(columns = {'Unnamed: 0':'Date'}, inplace = True)
 
