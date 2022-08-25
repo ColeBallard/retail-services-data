@@ -6,7 +6,7 @@
 
 ## **Description**
 
-This project is being created by Dev10 associates with Genesis 10, and is focused on retail services in the United States. 
+This project was created by Dev10 associates with Genesis 10, and is focused on retail services in the United States. 
 
 Specifically, we looked at nationwide retail data, including product and industry classifications from 1960 to 2022, completed a time series analysis of retail sales with the following independent variables: consumer price index (CPI), real person income (RPI), nationwide number of retail employees (USTRADE), and nationwide number of wholesale employees (USWTRADE). 
 
