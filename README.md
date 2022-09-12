@@ -2,7 +2,8 @@
 
 ## **Live Dashboard**
 
-[Heroku](https://us-retail-sales-dashboard.herokuapp.com/)
+[//]: <> (https://us-retail-sales-dashboard.herokuapp.com/)
+Currently offline.
 
 ## **Description**
 
