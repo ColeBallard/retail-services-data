@@ -1,9 +1,4 @@
-# retail-services-data
-
-## **Live Dashboard**
-
-[//]: <> (https://us-retail-sales-dashboard.herokuapp.com/)
-Currently offline.
+# Retail Services Data
 
 ## **Description**
 
